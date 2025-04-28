@@ -368,18 +368,21 @@ impl<J: Jet> RedeemNode<J> {
                 data: &PostOrderIterItem<&ConstructNode<J>>,
                 witness: &Option<Value>,
             ) -> Result<Value, Self::Error> {
-                let pruned_target_ty = data
-                    .node
-                    .arrow()
-                    .target
-                    .finalize()
-                    .expect("pruned types should check out if unpruned types check out");
-                let pruned_witness = witness
-                    .as_ref()
-                    .expect("witness node that originally stems from redeem program should be populated")
-                    .prune(&pruned_target_ty)
-                    .expect("pruned type should be shrunken version of unpruned type");
-                Ok(pruned_witness)
+                Ok(witness.as_ref().expect(
+                    "witness node that originally stems from redeem program should be populated",
+                ).shallow_clone())
+                // let pruned_target_ty = data
+                //     .node
+                //     .arrow()
+                //     .target
+                //     .finalize()
+                //     .expect("pruned types should check out if unpruned types check out");
+                // let pruned_witness = witness
+                //     .as_ref()
+                //     .expect("witness node that originally stems from redeem program should be populated")
+                //     .prune(&pruned_target_ty)
+                //     .expect("pruned type should be shrunken version of unpruned type");
+                // Ok(pruned_witness)
             }
 
             fn convert_disconnect(
